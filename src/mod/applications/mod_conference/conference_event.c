@@ -644,7 +644,9 @@ void conference_event_adv_la(conference_obj_t *conference, conference_member_t *
 		char idstr[128] = "";
 		int i;
 
-		snprintf(idstr, sizeof(idstr), "%d", member->id);
+		snprintf(idstr, sizeof(idstr), "%d", member->id);sagarmalam wants to merge 371 commits into 
+base: v1.10_ringrx 
+
 		msg = cJSON_CreateObject();
 		data = json_add_child_obj(msg, "pvtData", NULL);
 
@@ -957,6 +959,7 @@ void conference_event_pres_handler(switch_event_t *event)
 			switch_event_add_header_string(event, SWITCH_STACK_BOTTOM, "call-direction", conference->count == 1 ? "outbound" : "inbound");
 			switch_event_fire(&event);
 		}
+		conference_event_send_rfc(conference); // Generate conference data event with RFC CDR
 		switch_thread_rwlock_unlock(conference->rwlock);
 	} else if (switch_event_create(&event, SWITCH_EVENT_PRESENCE_IN) == SWITCH_STATUS_SUCCESS) {
 		switch_event_add_header_string(event, SWITCH_STACK_BOTTOM, "proto", CONF_CHAT_PROTO);
