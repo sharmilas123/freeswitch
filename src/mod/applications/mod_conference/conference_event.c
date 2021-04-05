@@ -644,8 +644,7 @@ void conference_event_adv_la(conference_obj_t *conference, conference_member_t *
 		char idstr[128] = "";
 		int i;
 
-		snprintf(idstr, sizeof(idstr), "%d", member->id);sagarmalam wants to merge 371 commits into 
-base: v1.10_ringrx 
+		snprintf(idstr, sizeof(idstr), "%d", member->id);
 
 		msg = cJSON_CreateObject();
 		data = json_add_child_obj(msg, "pvtData", NULL);
