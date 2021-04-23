@@ -5403,6 +5403,8 @@ void general_event_handler(switch_event_t *event)
 
 					if (!switch_true(no_sub_state)) {
 						sip_sub_st = "terminated;reason=noresource";
+					} else {
+						sip_sub_st="Active";
 					}
 
 					nua_notify(nh,
