@@ -3856,8 +3856,6 @@ SWITCH_DECLARE(switch_status_t) switch_channel_perform_mark_answered(switch_chan
 
 	switch_channel_api_on(channel, SWITCH_CHANNEL_API_ON_ANSWER_VARIABLE);
 
-	switch_channel_presence(channel, "unknown", "answered", NULL);
-
 	//switch_channel_audio_sync(channel);
 
 	switch_core_recovery_track(channel->session);
@@ -3871,7 +3869,11 @@ SWITCH_DECLARE(switch_status_t) switch_channel_perform_mark_answered(switch_chan
 	if (switch_channel_test_flag(channel, CF_RTT)) {
 		switch_channel_set_flag_partner(channel, CF_RTT);
 	}
-
+	//Moved switch channel ppresence at bottom and added 1 second sleep before sending presence in event.
+	usleep(1000000);
+        switch_log_printf(SWITCH_CHANNEL_CHANNEL_LOG(channel), SWITCH_LOG_INFO, "Waiting for 1 seconds before firing answered presence in event \n");
+	switch_channel_presence(channel, "unknown", "answered", NULL);
+	///////////
 	return SWITCH_STATUS_SUCCESS;
 }
 
