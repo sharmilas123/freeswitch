@@ -125,7 +125,7 @@ api_command_t conference_api_sub_commands[] = {
 	{"vid-bgimg", (void_fn_t) & conference_api_sub_canvas_bgimg, CONF_API_SUB_ARGS_SPLIT, "vid-bgimg", "<file> | clear [<canvas-id>]"},
 	{"vid-bandwidth", (void_fn_t) & conference_api_sub_vid_bandwidth, CONF_API_SUB_ARGS_SPLIT, "vid-bandwidth", "<BW>"},
 	{"vid-personal", (void_fn_t) & conference_api_sub_vid_personal, CONF_API_SUB_ARGS_SPLIT, "vid-personal", "[on|off]"},
-	{"list-vid-layout", (void_fn_t) & conference_api_sub_list_vid_layout, CONF_API_SUB_ARGS_SPLIT, "list-vid-layout", ""}
+	{"list-vid-layout", (void_fn_t) & conference_api_sub_list_vid_layout, CONF_API_SUB_ARGS_SPLIT, "list-vid-layout", "<canvas_id>"}
 
 };
 
@@ -4148,16 +4148,22 @@ void conference_api_layout(conference_obj_t *conference, mcu_canvas_t *canvas, v
 switch_status_t conference_api_sub_list_vid_layout(conference_obj_t *conference, switch_stream_handle_t *stream, int argc, char **argv)
 {
 
-        int i;
-switch_mutex_lock(conference_globals.setup_mutex);
+        int i=0;
+        if(argc < 3){
+                i=0;
+        } else {
+                i=atoi(argv[2]);
+        }
+        switch_mutex_lock(conference_globals.setup_mutex);
 
-                        for (i = 0; i <= conference->canvas_count; i++) {
                                 if (conference->canvases[i]) {
                                         conference_api_layout(conference, conference->canvases[i], conference->canvases[i]->vlayout,stream);
+                                } else {
+                                        stream->write_function(stream, "-ERR  Canvas ID: %d does not exist", i);
                                 }
-                        }
 
-switch_mutex_unlock(conference_globals.setup_mutex);
+
+        switch_mutex_unlock(conference_globals.setup_mutex);
 
 
 
