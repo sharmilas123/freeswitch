@@ -1434,6 +1434,10 @@ void conference_jlist(conference_obj_t *conference, cJSON *json_conferences)
 		cJSON_AddNumberToObject(json_conference_member, "volume_out", member->volume_out_level);
 		cJSON_AddNumberToObject(json_conference_member, "output-volume", member->volume_out_level);
 		cJSON_AddNumberToObject(json_conference_member, "input-volume", member->volume_in_level);
+		cJSON_AddNumberToObject(json_conference_member, "canvas-id", member->canvas_id);
+                cJSON_AddNumberToObject(json_conference_member, "video-layer-id", member->video_layer_id);
+                cJSON_AddItemToObject(json_conference_member, "res-id", member->video_reservation_id ?
+                                                                  cJSON_CreateString(member->video_reservation_id) : cJSON_CreateNull());
 		ADDBOOL(json_conference_member_flags, "can_hear", !hold && conference_utils_member_test_flag(member, MFLAG_CAN_HEAR));
 		ADDBOOL(json_conference_member_flags, "can_see", !hold && conference_utils_member_test_flag(member, MFLAG_CAN_SEE));
 		ADDBOOL(json_conference_member_flags, "can_speak", !hold && conference_utils_member_test_flag(member, MFLAG_CAN_SPEAK));
