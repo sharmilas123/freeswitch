@@ -1284,6 +1284,16 @@ void conference_xlist(conference_obj_t *conference, switch_xml_t x_conference, i
 		add_x_tag(x_member, "caller_id_name", profile->caller_id_name, toff++);
 		add_x_tag(x_member, "caller_id_number", profile->caller_id_number, toff++);
 
+                switch_snprintf(i, sizeof(i), "%d", member->canvas_id);
+                add_x_tag(x_member, "canvas_id", i, toff++);
+
+                switch_snprintf(i, sizeof(i), "%d", member->video_layer_id);
+                add_x_tag(x_member, "video_layer_id", i, toff++);
+
+                 switch_snprintf(i, sizeof(i), "%d", member->video_reservation_id);
+                add_x_tag(x_member, "res_id", i, toff++);
+
+
 
 		switch_snprintf(i, sizeof(i), "%d", switch_epoch_time_now(NULL) - member->join_time);
 		add_x_tag(x_member, "join_time", i, toff++);
