@@ -576,8 +576,7 @@ void conference_event_adv_layout(conference_obj_t *conference, mcu_canvas_t *can
 {
 	cJSON *msg, *data, *obj;
 	int i = 0;
-	char *ebuf;
-        switch_event_t *params = NULL;
+
 
 
 	if (!conference->info_event_channel) {
@@ -626,19 +625,7 @@ void conference_event_adv_layout(conference_obj_t *conference, mcu_canvas_t *can
 	}
 
 	switch_mutex_unlock(canvas->mutex);
-       //Firing conference data event with conf layout information
-                        ebuf = cJSON_Print(msg);
-                        switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_DEBUG, "%s\n", ebuf);
-                        switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_DEBUG, "sending conf data event ");
-                        switch_event_create(&params, SWITCH_EVENT_CONFERENCE_DATA);
-                        params->event_id = SWITCH_EVENT_CONFERENCE_DATA;
-                        params->flags |= EF_UNIQ_HEADERS;
-                        switch_event_add_header(params, SWITCH_STACK_TOP, "Event-Name", "CONFERENCE_DATA");
-                        switch_event_add_body(params, "%s", ebuf);
-                        switch_event_fire(&params);
-                        switch_safe_free(ebuf);
 
-      ///////////////////////////////////////
 
 	switch_event_channel_broadcast(conference->info_event_channel, &msg, "mod_conference", conference_globals.event_channel_id);
 
