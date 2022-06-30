@@ -2751,15 +2751,19 @@ void sofia_glue_actually_execute_sql_trans(sofia_profile_t *profile, char *sql, 
 {
 	switch_cache_db_handle_t *dbh = NULL;
 
-	if (mutex) {
-		switch_mutex_lock(mutex);
+	if (mod_sofia_globals.global_DB_lock) {
+		if (mutex) {
+			switch_mutex_lock(mutex);
+			switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_INFO, "[Carbyne]ifcondition::::::sofia_glue_actually_execute_sql_trans\n");                                                                         
+		}
 	}
 
 
 	if (!(dbh = sofia_glue_get_db_handle(profile))) {
 		switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_ERROR, "Error Opening DB\n");
 
-		goto end;
+		//goto end;
+		return;
 	}
 
 	switch_cache_db_persistant_execute_trans_full(dbh, sql, 1,
@@ -2771,10 +2775,13 @@ void sofia_glue_actually_execute_sql_trans(sofia_profile_t *profile, char *sql, 
 
 	switch_cache_db_release_db_handle(&dbh);
 
- end:
+ //end:
 
-	if (mutex) {
-		switch_mutex_unlock(mutex);
+	if (mod_sofia_globals.global_DB_lock) {
+		if (mutex) {
+			switch_mutex_unlock(mutex);
+			switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_INFO, "[Carbyne]ifcondition::::::sofia_glue_actually_execute_sql_trans\n");
+		}
 	}
 }
 
@@ -2783,24 +2790,33 @@ void sofia_glue_actually_execute_sql(sofia_profile_t *profile, char *sql, switch
 	switch_cache_db_handle_t *dbh = NULL;
 	char *err = NULL;
 
-	if (mutex) {
-		switch_mutex_lock(mutex);
+	if (mod_sofia_globals.global_DB_lock) {                                                                                                                               
+		if (mutex) {
+			switch_mutex_lock(mutex);
+			switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_INFO, "[Carbyne]ifcondition::::::sofia_glue_actually_execute_sql\n");
+		}
 	}
 
 	if (!(dbh = sofia_glue_get_db_handle(profile))) {
 		switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_ERROR, "Error Opening DB\n");
 
+	if (mod_sofia_globals.global_DB_lock) {	
 		if (mutex) {
 			switch_mutex_unlock(mutex);
+			switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_INFO, "[Carbyne]ifcondition::::::sofia_glue_actually_execute_sql\n");
 		}
+	}
 
 		return;
 	}
 
 	switch_cache_db_execute_sql(dbh, sql, &err);
 
-	if (mutex) {
-		switch_mutex_unlock(mutex);
+	if (mod_sofia_globals.global_DB_lock) {
+		if (mutex) {
+			switch_mutex_unlock(mutex);
+			switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_INFO, "[Carbyne]ifcondition::::::sofia_glue_actually_execute_sql\n");
+		}
 	}
 
 	if (err) {
@@ -2818,24 +2834,33 @@ switch_bool_t sofia_glue_execute_sql_callback(sofia_profile_t *profile,
 	char *errmsg = NULL;
 	switch_cache_db_handle_t *dbh = NULL;
 
-	if (mutex) {
-		switch_mutex_lock(mutex);
+	if (mod_sofia_globals.global_DB_lock) {
+		if (mutex) {
+			switch_mutex_lock(mutex);
+			switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_INFO, "[Carbyne]ifcondition::::::sofia_glue_execute_sql_callback\n");
+		}
 	}
 
 	if (!(dbh = sofia_glue_get_db_handle(profile))) {
 		switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_ERROR, "Error Opening DB\n");
 
+	if (mod_sofia_globals.global_DB_lock) {
 		if (mutex) {
 			switch_mutex_unlock(mutex);
+			switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_INFO, "[Carbyne]ifcondition::::::sofia_glue_execute_sql_callback\n");
 		}
+	}
 
 		return ret;
 	}
 
 	switch_cache_db_execute_sql_callback(dbh, sql, callback, pdata, &errmsg);
 
-	if (mutex) {
-		switch_mutex_unlock(mutex);
+	if (mod_sofia_globals.global_DB_lock) {
+		if (mutex) {
+			switch_mutex_unlock(mutex);
+			switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_INFO, "[Carbyne]ifcondition::::::sofia_glue_execute_sql_callback\n");
+		}
 	}
 
 	if (errmsg) {
@@ -2854,24 +2879,33 @@ char *sofia_glue_execute_sql2str(sofia_profile_t *profile, switch_mutex_t *mutex
 	char *err = NULL;
 	switch_cache_db_handle_t *dbh = NULL;
 
-	if (mutex) {
-		switch_mutex_lock(mutex);
+	if (mod_sofia_globals.global_DB_lock) {
+		if (mutex) {
+			switch_mutex_lock(mutex);
+			switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_INFO, "[Carbyne]ifcondition::::::sofia_glue_execute_sql2str\n");
+		}
 	}
 
 	if (!(dbh = sofia_glue_get_db_handle(profile))) {
 		switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_ERROR, "Error Opening DB\n");
 
+	if (mod_sofia_globals.global_DB_lock) {
 		if (mutex) {
 			switch_mutex_unlock(mutex);
+			switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_INFO, "[Carbyne]ifcondition::::::sofia_glue_execute_sql2str\n");
 		}
+	}
 
 		return NULL;
 	}
 
 	ret = switch_cache_db_execute_sql2str(dbh, sql, resbuf, len, &err);
 
-	if (mutex) {
-		switch_mutex_unlock(mutex);
+	if (mod_sofia_globals.global_DB_lock) {
+		if (mutex) {
+			switch_mutex_unlock(mutex);
+			switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_INFO, "[Carbyne]ifcondition::::::sofia_glue_execute_sql2str\n");
+		}
 	}
 
 	if (err) {
