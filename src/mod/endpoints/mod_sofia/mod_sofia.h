@@ -406,7 +406,6 @@ struct mod_sofia_globals {
 	time_t presence_epoch;
 	int presence_year;
 	int abort_on_empty_external_ip;
-	int global_DB_lock;
 };
 extern struct mod_sofia_globals mod_sofia_globals;
 
