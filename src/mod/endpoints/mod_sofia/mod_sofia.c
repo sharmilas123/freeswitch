@@ -4430,6 +4430,7 @@ SWITCH_STANDARD_API(sofia_function)
 		"sofia <status|xmlstatus> gateway <name>\n\n"
 		"sofia loglevel <all|default|tport|iptsec|nea|nta|nth_client|nth_server|nua|soa|sresolv|stun> [0-9]\n"
 		"sofia tracelevel <console|alert|crit|err|warning|notice|info|debug>\n\n"
+		"sofia global-db-lock <on|off>\n"
 		"sofia help\n"
 		"--------------------------------------------------------------------------------\n";
 
@@ -4483,6 +4484,17 @@ SWITCH_STANDARD_API(sofia_function)
 		goto done;
 	} else if (!strcasecmp(argv[0], "help")) {
 		stream->write_function(stream, "%s", usage_string);
+		goto done;
+        } else if (!strcasecmp(argv[0], "global-db-lock")) {
+		if (argc > 1) {
+			if (strstr(argv[1], "on")) {
+				mod_sofia_globals.global_db_lock = 1;
+				stream->write_function(stream, "+OK Global-db-lock is on\n");
+			} else if(strstr(argv[1], "off")) {
+				mod_sofia_globals.global_db_lock = 0;
+				stream->write_function(stream, "+OK Global-db-lock is off\n");
+			}
+		}
 		goto done;
 	} else if (!strcasecmp(argv[0], "global")) {
 		int ston = -1;
@@ -6366,6 +6378,8 @@ SWITCH_MODULE_LOAD_FUNCTION(mod_sofia_load)
 
 	switch_console_set_complete("add sofia global ::[siptrace::standby::capture::watchdog ::[on:off");
 	switch_console_set_complete("add sofia global debug ::[presence:sla:none");
+
+	switch_console_set_complete("add sofia global-db-lock ::[on:off");
 
 	switch_console_set_complete("add sofia profile restart all");
 	switch_console_set_complete("add sofia profile ::sofia::list_profiles ::[start:rescan:restart:check_sync");

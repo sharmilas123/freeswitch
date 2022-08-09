@@ -2751,7 +2751,7 @@ void sofia_glue_actually_execute_sql_trans(sofia_profile_t *profile, char *sql, 
 {
 	switch_cache_db_handle_t *dbh = NULL;
 
-	if (mod_sofia_globals.global_db_lock) {
+	if (mod_sofia_globals.global_db_lock > 0) {
 		if (mutex) {
 			switch_mutex_lock(mutex);
 		}
@@ -2761,7 +2761,7 @@ void sofia_glue_actually_execute_sql_trans(sofia_profile_t *profile, char *sql, 
 	if (!(dbh = sofia_glue_get_db_handle(profile))) {
 		switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_ERROR, "Error Opening DB\n");
 
-	if (mod_sofia_globals.global_db_lock) {
+	if (mod_sofia_globals.global_db_lock > 0) {
 		return;
 	} else {
 		goto end;
@@ -2779,7 +2779,7 @@ void sofia_glue_actually_execute_sql_trans(sofia_profile_t *profile, char *sql, 
 
  end:
 
-	if (mod_sofia_globals.global_db_lock) {
+	if (mod_sofia_globals.global_db_lock > 0) {
 		if (mutex) {
 			switch_mutex_unlock(mutex);
 		}
@@ -2791,7 +2791,7 @@ void sofia_glue_actually_execute_sql(sofia_profile_t *profile, char *sql, switch
 	switch_cache_db_handle_t *dbh = NULL;
 	char *err = NULL;
 
-	if (mod_sofia_globals.global_db_lock) {
+	if (mod_sofia_globals.global_db_lock > 0) {
 		if (mutex) {
 			switch_mutex_lock(mutex);
 		}
@@ -2800,7 +2800,7 @@ void sofia_glue_actually_execute_sql(sofia_profile_t *profile, char *sql, switch
 	if (!(dbh = sofia_glue_get_db_handle(profile))) {
 		switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_ERROR, "Error Opening DB\n");
 
-	if (mod_sofia_globals.global_db_lock) {
+	if (mod_sofia_globals.global_db_lock > 0) {
 		if (mutex) {
 			switch_mutex_unlock(mutex);
 		}
@@ -2811,7 +2811,7 @@ void sofia_glue_actually_execute_sql(sofia_profile_t *profile, char *sql, switch
 
 	switch_cache_db_execute_sql(dbh, sql, &err);
 
-	if (mod_sofia_globals.global_db_lock) {
+	if (mod_sofia_globals.global_db_lock > 0) {
 		if (mutex) {
 			switch_mutex_unlock(mutex);
 		}
@@ -2832,16 +2832,17 @@ switch_bool_t sofia_glue_execute_sql_callback(sofia_profile_t *profile,
 	char *errmsg = NULL;
 	switch_cache_db_handle_t *dbh = NULL;
 
-	if (mod_sofia_globals.global_db_lock) {
+	if (mod_sofia_globals.global_db_lock > 0) {
 		if (mutex) {
 			switch_mutex_lock(mutex);
+			 switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_INFO, "sofia API working\n");
 		}
 	}
 
 	if (!(dbh = sofia_glue_get_db_handle(profile))) {
 		switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_ERROR, "Error Opening DB\n");
 
-	if (mod_sofia_globals.global_db_lock) {
+	if (mod_sofia_globals.global_db_lock > 0) {
 		if (mutex) {
 			switch_mutex_unlock(mutex);
 		}
@@ -2852,7 +2853,7 @@ switch_bool_t sofia_glue_execute_sql_callback(sofia_profile_t *profile,
 
 	switch_cache_db_execute_sql_callback(dbh, sql, callback, pdata, &errmsg);
 
-	if (mod_sofia_globals.global_db_lock) {
+	if (mod_sofia_globals.global_db_lock > 0) {
 		if (mutex) {
 			switch_mutex_unlock(mutex);
 		}
@@ -2874,7 +2875,7 @@ char *sofia_glue_execute_sql2str(sofia_profile_t *profile, switch_mutex_t *mutex
 	char *err = NULL;
 	switch_cache_db_handle_t *dbh = NULL;
 
-	if (mod_sofia_globals.global_db_lock) {
+	if (mod_sofia_globals.global_db_lock > 0) {
 		if (mutex) {
 			switch_mutex_lock(mutex);
 		}
@@ -2883,7 +2884,7 @@ char *sofia_glue_execute_sql2str(sofia_profile_t *profile, switch_mutex_t *mutex
 	if (!(dbh = sofia_glue_get_db_handle(profile))) {
 		switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_ERROR, "Error Opening DB\n");
 
-	if (mod_sofia_globals.global_db_lock) {
+	if (mod_sofia_globals.global_db_lock > 0) {
 		if (mutex) {
 			switch_mutex_unlock(mutex);
 		}
@@ -2894,7 +2895,7 @@ char *sofia_glue_execute_sql2str(sofia_profile_t *profile, switch_mutex_t *mutex
 
 	ret = switch_cache_db_execute_sql2str(dbh, sql, resbuf, len, &err);
 
-	if (mod_sofia_globals.global_db_lock) {
+	if (mod_sofia_globals.global_db_lock > 0) {
 		if (mutex) {
 			switch_mutex_unlock(mutex);
 		}
